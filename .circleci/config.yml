@@ -32,8 +32,7 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-
-notify:
+  notify:
     docker:
       - image: 'cimg/base:stable'
     steps:
