@@ -22,34 +22,6 @@ jobs:
     # Then run your tests!!
     # CircleCI will report the results back to your VCS provider.
     steps:
-      # Checkout the code as the first step.
-      - checkout
-      # Next, the node orb's install-packages step will install the dependencies from a package.json.
-      # The orb install-packages step will also automatically cache them for faster future runs.
-      - node/install-packages
-      # If you are using yarn instead npm, remove the line above and uncomment the two lines below.
-      # - node/install-packages:
-      #     pkg-manager: yarn 
-      - run:
-          name: Run tests
-          command: npm test
-      - slack/notify:
-          event: fail
-          mentions: '@nico'
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
-  build:
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      - checkout
-      - sonarcloud/scan
-  notify:
-    docker:
-      - image: cimg/node:15.1
-    steps:
       - slack/notify:
           custom: |
             {
@@ -67,12 +39,32 @@ jobs:
               ]
             }
           event: always
-  test:
+      # Checkout the code as the first step.
+      - checkout
+      # Next, the node orb's install-packages step will install the dependencies from a package.json.
+      # The orb install-packages step will also automatically cache them for faster future runs.
+      - node/install-packages
+      # If you are using yarn instead npm, remove the line above and uncomment the two lines below.
+      # - node/install-packages:
+      #     pkg-manager: yarn 
+      - run:
+          name: Run tests
+          command: npm test
+      - heroku/deploy-via-git
+      - slack/notify:
+          event: fail
+          mentions: '@nico'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+  build:
     docker:
       - image: cimg/node:15.1
     steps:
-      - run: echo "test my app"
-
+      - checkout
+      - sonarcloud/scan
+      
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
@@ -91,10 +83,3 @@ workflows:
     jobs:
       - build:
           context: sonarcloud
-  heroku_deploy:
-    jobs:
-      - heroku/deploy-via-git
-  send-notification:
-    jobs:
-      - notify:
-          context: slack-secrets
