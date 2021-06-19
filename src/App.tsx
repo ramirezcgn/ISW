@@ -44,7 +44,7 @@ function App() {
           <label>Resultado: </label>
           <input
             value={total}
-            style={{fontSize: 24, width: 100, textAlign: 'center'}}
+            style={{fontSize: 24, width: 100, textAlign: 'center', backgroundColor: 'white'}}
             disabled
             readOnly
           />
