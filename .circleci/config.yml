@@ -9,6 +9,7 @@ orbs:
   node: circleci/node@4.1
   heroku: circleci/heroku@0.0.10
   slack: circleci/slack@4.4.2
+  sonarcloud: sonarsource/sonarcloud@1.0.2
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
@@ -21,6 +22,14 @@ jobs:
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
     steps:
+      - run: echo "deploy my app"
+      - slack/notify:
+          event: fail
+          mentions: '@nico'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
       # Checkout the code as the first step.
       - checkout
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
@@ -32,9 +41,15 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+  build:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - checkout
+      - sonarcloud/scan
   notify:
     docker:
-      - image: 'cimg/base:stable'
+      - image: cimg/node:15.1
     steps:
       - slack/notify:
           custom: |
@@ -53,6 +68,11 @@ jobs:
               ]
             }
           event: always
+  test:
+    docker:
+      - image: cimg/node:15.1
+    steps:
+      - run: echo "test my app"
 
 workflows:
   # Below is the definition of your workflow.
@@ -61,9 +81,23 @@ workflows:
   # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
   sample: 
     jobs:
-      - build-and-test
+      - slack/on-hold:
+          context: slack-secrets
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - test
+      - build-and-test:
+          filters:
+            tags:
+              only: /^v.*/
       # For running simple node tests, you could optionally use the node/test job from the orb to replicate and replace the job above in fewer lines.
       # - node/test
+  main:
+    jobs:
+      - build:
+          context: sonarcloud
   heroku_deploy:
     jobs:
       - heroku/deploy-via-git
