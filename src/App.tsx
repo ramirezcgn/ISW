@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import logo from './logo.svg';
 import { suma } from './Utils';
 import './App.css';
 
