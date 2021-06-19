@@ -22,14 +22,6 @@ jobs:
     # Then run your tests!!
     # CircleCI will report the results back to your VCS provider.
     steps:
-      - run: echo "deploy my app"
-      - slack/notify:
-          event: fail
-          mentions: '@nico'
-          template: basic_fail_1
-      - slack/notify:
-          event: pass
-          template: success_tagged_deploy_1
       # Checkout the code as the first step.
       - checkout
       # Next, the node orb's install-packages step will install the dependencies from a package.json.
@@ -41,6 +33,13 @@ jobs:
       - run:
           name: Run tests
           command: npm test
+      - slack/notify:
+          event: fail
+          mentions: '@nico'
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
   build:
     docker:
       - image: cimg/node:15.1
