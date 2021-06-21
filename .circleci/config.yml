@@ -5,25 +5,17 @@ orbs:
   slack: circleci/slack@4.4.2
   sonarcloud: sonarsource/sonarcloud@1.0.2
 jobs:
-  build:  
+  build-and-test:  
     docker:
       - image: cimg/node:15.1
     steps:
       - checkout
+      - sonarcloud/scan
       - node/install-packages
-  test:  
-    docker:
-      - image: cimg/node:15.1
-    steps:
       - run:
           name: Run tests
-          command: npm test
-  sonar:  
-    docker:
-      - image: cimg/node:15.1
-    steps:
-      - sonarcloud/scan
-  deploy:  
+          command: npm test      
+  deploy:
     docker:
       - image: cimg/node:15.1
     steps:
@@ -35,14 +27,26 @@ jobs:
       - slack/notify:
           custom: |
             {
+              "text": "CircleCI job start!",
               "blocks": [
                 {
-                  "type": "section",
-                  "fields": [
+                  "type": "header",
+                  "text": {
+                    "type": "plain_text",
+                    "text": "Start Building...",
+                    "emoji": true
+                  }
+                },
+                {
+                  "type": "actions",
+                  "elements": [
                     {
-                      "type": "plain_text",
-                      "text": "*Start Building...*",
-                      "emoji": true
+                      "type": "button",
+                      "text": {
+                        "type": "plain_text",
+                        "text": "View Job"
+                      },
+                      "url": "${CIRCLE_BUILD_URL}"
                     }
                   ]
                 }
@@ -60,15 +64,10 @@ jobs:
 workflows:
   build-test-and-deploy: 
     jobs:
-      - sonar
-      - build
-      - test:
-          requires:
-            - build
+      - build-and-test
       - deploy:
           requires:
-            - sonar
-            - test
+            - build-and-test
       - notify:
           context: slack-secrets
           filters:
