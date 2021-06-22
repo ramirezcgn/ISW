@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   node: circleci/node@4.1
-  heroku: circleci/heroku@0.0.10
+  heroku: circleci/heroku@1.2.6
   slack: circleci/slack@4.4.2
   sonarcloud: sonarsource/sonarcloud@1.0.2
 jobs:
@@ -53,9 +53,10 @@ jobs:
           mentions: '@Nico'
           template: basic_fail_1
   deploy:
-    docker:
-      - image: cimg/node:15.1
+    executor: heroku/default
     steps:
+      - checkout
+      - heroku/install
       - heroku/deploy-via-git
       - slack/notify:
           event: fail
