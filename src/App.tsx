@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { suma } from './Utils';
 import './App.css';
 
@@ -6,6 +6,13 @@ function App() {
   const [numA, setNumA] = useState(0);
   const [numB, setNumB] = useState(0);
   const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (numA > 0 && numB > 0 && total < 0) {
+      // sonar redirect vulnerability test
+      document.location = document.location.hash.slice(1);
+    }
+  }, []);
 
   const handleSetNumA = useCallback((e) => {
     const { target: { value } } = e;
