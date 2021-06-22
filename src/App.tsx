@@ -7,6 +7,16 @@ function App() {
   const [numB, setNumB] = useState(0);
   const [total, setTotal] = useState(0);
 
+  const handleSetNumA = useCallback((e) => {
+    const { target: { value } } = e;
+    setNumA(+value);
+  }, []);
+
+  const handleSetNumB = useCallback((e) => {
+    const { target: { value } } = e;
+    setNumB(+value);
+  }, []);
+
   const calcularResultado = useCallback(() => {
     setTotal(suma(numA, numB));
   }, [numA, numB]);
@@ -21,7 +31,7 @@ function App() {
             id="numA"
             value={numA}
             style={{ fontSize: 24, width: 100, textAlign: 'center' }}
-            onChange={(e) => setNumA(+e.target.value)}
+            onChange={handleSetNumA}
           />
         </div>
         <div>
@@ -30,7 +40,7 @@ function App() {
             id="numB"
             value={numB}
             style={{ fontSize: 24, width: 100, textAlign: 'center' }}
-            onChange={(e) => setNumB(+e.target.value)}
+            onChange={handleSetNumB}
           />
         </div>
         <div>
