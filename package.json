@@ -19,7 +19,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --testResultsProcessor ./node_modules/jest-sonar-reporter",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext ts --ext tsx --quiet --fix",
     "prepare": "is-ci || husky install"
@@ -53,6 +53,7 @@
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^6.0.0",
-    "is-ci": "^2.0.0"
+    "is-ci": "^2.0.0",
+    "jest-sonar-reporter": "^2.0.0"
   }
 }
