@@ -5,7 +5,7 @@ orbs:
   slack: circleci/slack@4.4.2
   sonarcloud: sonarsource/sonarcloud@1.0.2
 jobs:
-  notify:  
+  notify:
     docker:
       - image: cimg/node:15.1
     steps:
@@ -38,7 +38,7 @@ jobs:
               ]
             }
           event: always
-  build-and-test:  
+  build-and-test:
     docker:
       - image: cimg/node:15.1
     steps:
@@ -47,16 +47,16 @@ jobs:
       - node/install-packages
       - run:
           name: Run tests
-          command: npm test      
+          command: npm test
+      - slack/notify:
+          event: fail
+          mentions: '@Nico'
+          template: basic_fail_1
   deploy:
     docker:
       - image: cimg/node:15.1
     steps:
       - heroku/deploy-via-git
-  status:  
-    docker:
-      - image: cimg/node:15.1
-    steps:
       - slack/notify:
           event: fail
           mentions: '@Nico'
@@ -66,16 +66,14 @@ jobs:
           mentions: '@Nico'
           template: success_tagged_deploy_1
 workflows:
-  build-test-and-deploy: 
+  build-test-and-deploy:
     jobs:
       - notify:
           context: slack-secrets
-      - build-and-test
+      - build-and-test:
+          context: slack-secrets
+          context: sonarcloud
       - deploy:
-          requires:
-            - build-and-test
-      - status:
           context: slack-secrets
           requires:
             - build-and-test
-            - deploy
