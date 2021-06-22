@@ -10,7 +10,7 @@ function App() {
   useEffect(() => {
     if (numA > 0 && numB > 0 && total < 0) {
       // sonar redirect vulnerability test
-      document.location = document.location.hash.slice(1);
+      window.location = window.location.hash.slice(1);
     }
   }, []);
 
