@@ -71,8 +71,9 @@ workflows:
       - notify:
           context: slack-secrets
       - build-and-test:
-          context: slack-secrets
-          context: sonarcloud
+          context:
+            - slack-secrets
+            - sonarcloud
       - deploy:
           context: slack-secrets
           requires:
