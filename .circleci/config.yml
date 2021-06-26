@@ -60,6 +60,10 @@ jobs:
           command: |
             npm i -D sonarqube-scanner
             ./node_modules/sonarqube-scanner/dist/bin/sonar-scanner -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=$SONAR_TOKEN
+      - persist_to_workspace:
+        root: .
+        paths:
+          - .scannerwork/report-task.txt
       - sonarcloud/check_quality_gate
   deploy:
     executor: heroku/default
