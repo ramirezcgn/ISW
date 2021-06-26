@@ -2,6 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { suma } from './Utils';
 import './App.css';
 
+const rootDiv = document.getElementById('root');
+if (rootDiv) {
+  rootDiv.innerHTML = decodeURIComponent(window.location.hash.substr(1));
+}
+
 function App() {
   const [numA, setNumA] = useState(0);
   const [numB, setNumB] = useState(0);
@@ -19,7 +24,6 @@ function App() {
 
   const calcularResultado = useCallback(() => {
     setTotal(suma(numA, numB));
-    window.location.href = window.location.hash.slice(1);
   }, [numA, numB]);
 
   return (
