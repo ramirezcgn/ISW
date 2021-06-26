@@ -47,11 +47,19 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-      - sonarcloud/scan_with_npm
       - slack/notify:
           event: fail
           mentions: '@Nico'
           template: basic_fail_1
+  static_code_scan:
+    executor: node/default
+    steps:
+      - run:
+          name: Static code Analysis
+          command: |
+            npm i -D sonarqube-scanner
+            ./node_modules/sonarqube-scanner/dist/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN
+      - sonarcloud/check_quality_gate
   deploy:
     executor: heroku/default
     steps:
@@ -75,7 +83,7 @@ workflows:
           context:
             - slack-secrets
             - sonarcloud
-      - sonarcloud/check_quality_gate:
+      - static_code_scan:
           context: sonarcloud
           requires:
             - build-and-test
@@ -83,3 +91,4 @@ workflows:
           context: slack-secrets
           requires:
             - build-and-test
+            - static_code_scan
