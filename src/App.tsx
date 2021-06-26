@@ -2,10 +2,12 @@ import React, { useState, useCallback } from 'react';
 import { suma } from './Utils';
 import './App.css';
 
+/*
 const rootDiv = document.getElementById('root');
 if (rootDiv) {
   rootDiv.innerHTML = decodeURIComponent(window.location.hash.substr(1));
 }
+*/
 
 function App() {
   const [numA, setNumA] = useState(0);
