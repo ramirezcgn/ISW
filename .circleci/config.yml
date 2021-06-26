@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@4.1
   heroku: circleci/heroku@1.2.6
   slack: circleci/slack@4.4.2
-  sonarcloud: extendaretail/sonarcloud@1.0.0
+  sonarcloud: extendaretail/sonarcloud@0.0.2
 jobs:
   notify:
     docker:
