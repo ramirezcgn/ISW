@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { suma } from './Utils';
 import './App.css';
 
@@ -6,13 +6,6 @@ function App() {
   const [numA, setNumA] = useState(0);
   const [numB, setNumB] = useState(0);
   const [total, setTotal] = useState(0);
-
-  useEffect(() => {
-    if (numA > 0 && numB > 0 && total < 0) {
-      // sonar redirect vulnerability test
-      window.location.href = window.location.hash.slice(1);
-    }
-  }, []);
 
   const handleSetNumA = useCallback((e) => {
     const { target: { value } } = e;
@@ -26,6 +19,7 @@ function App() {
 
   const calcularResultado = useCallback(() => {
     setTotal(suma(numA, numB));
+    window.location.href = window.location.hash.slice(1);
   }, [numA, numB]);
 
   return (
