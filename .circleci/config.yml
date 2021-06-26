@@ -3,7 +3,7 @@ orbs:
   node: circleci/node@4.1
   heroku: circleci/heroku@1.2.6
   slack: circleci/slack@4.4.2
-  sonarcloud: sonarsource/sonarcloud@1.0.2
+  sonarcloud: extendaretail/sonarcloud@1.0.0
 jobs:
   notify:
     docker:
@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Run tests
           command: npm test
-      - sonarcloud/scan
+      - sonarcloud/scan_with_npm
       - slack/notify:
           event: fail
           mentions: '@Nico'
@@ -75,6 +75,10 @@ workflows:
           context:
             - slack-secrets
             - sonarcloud
+      - sonarcloud/check_quality_gate:
+          context: sonarcloud
+          requires:
+            - build-and-test
       - deploy:
           context: slack-secrets
           requires:
