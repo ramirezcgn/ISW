@@ -54,8 +54,7 @@ jobs:
   static_code_scan:
     executor: node/default
     steps:
-      - attach_workspace:
-          at: ~/project
+      - checkout
       - run:
           name: Static code Analysis
           command: |
