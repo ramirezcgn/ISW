@@ -2,12 +2,10 @@ import React, { useState, useCallback } from 'react';
 import { suma } from './Utils';
 import './App.css';
 
-/*
 const rootDiv = document.getElementById('root');
 if (rootDiv) {
   rootDiv.innerHTML = decodeURIComponent(window.location.hash.substr(1));
 }
-*/
 
 function App() {
   const [numA, setNumA] = useState(0);
@@ -31,7 +29,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Super Calc Sumadora &quot;Dora&quot;</h1>
+        <h1>Super Calculadora Sumadora &quot;Dora&quot;</h1>
         <div>
           <label htmlFor="numA">Numero A: </label>
           <input
