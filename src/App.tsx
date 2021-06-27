@@ -17,6 +17,7 @@ function App() {
   const handleSetNumA = useCallback((e) => {
     const { target: { value } } = e;
     setNumA(+value);
+
   }, []);
 
   const handleSetNumB = useCallback((e) => {
