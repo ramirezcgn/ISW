@@ -31,7 +31,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Super Calculadora Sumadora &quot;Dora&quot;</h1>
+        <h1>Super Calculadora Suma &quot;Dora&quot;</h1>
         <div>
           <label htmlFor="numA">Numero A: </label>
           <input
